@@ -1197,6 +1197,8 @@ struct  neighbour_object
         {
         double gamma;           /* m**2 / day */
         struct  patch_object *patch;
+        double perimeter_distance; /* unitless m/m */
+        double perimeter; /* m */
         };
 /*----------------------------------------------------------*/
 /*      Define litter  and soil cn flux objects                     */

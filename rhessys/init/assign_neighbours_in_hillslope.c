@@ -45,7 +45,9 @@ int assign_neighbours_in_hillslope( struct neighbour_object *neighbours,
 	double gamma;
 	double sum_gamma;
 	struct patch_object *neigh;
-	
+	double distance;
+    double perimeter;
+    
 	/*--------------------------------------------------------------*/
 	/*  find and assign each neighbour to array						*/
 	/*--------------------------------------------------------------*/
@@ -53,11 +55,13 @@ int assign_neighbours_in_hillslope( struct neighbour_object *neighbours,
 	sum_gamma = 0.0;
 	new_num_neighbours = num_neighbours;
 	for (i=0; i< num_neighbours; i++) {
-		fscanf(routing_file,"%d %d %d %lf",
+		fscanf(routing_file,"%d %d %d %lf %lf %lf",
 			&patch_ID,
 			&zone_ID,
 			&hill_ID,
-			&gamma);
+			&gamma,
+            &perimeter,
+            &distance);
 		/*----------------------------------------------------------------------*/
 		/*	only attach neighbours which have a gamma > 0 			*/
 		/* patches should point only to other patches in the same basin		*/
@@ -80,6 +84,8 @@ int assign_neighbours_in_hillslope( struct neighbour_object *neighbours,
 			sum_gamma += gamma;
 			neighbours[inx].gamma = gamma;
 			neighbours[inx].patch = neigh;
+            neighbours[inx].perimeter_distance = perimeter/distance;
+            neighbours[inx].perimeter = perimeter;
 			inx += 1;
 		} else {
     	new_num_neighbours -= 1;

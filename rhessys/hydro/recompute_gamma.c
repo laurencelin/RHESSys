@@ -36,7 +36,7 @@ double recompute_gamma( struct patch_object *patch,
 	/*	Local variable definition.				*/ 
 	/*--------------------------------------------------------------*/ 
 	int i, d;
-	double adjustment, revised_total_gamma;  
+	double totalperimeter, revised_total_gamma;  
 	double z1, z2, water_table_z1, water_table_z2;
 	/*--------------------------------------------------------------*/ 
 	/*	for now, if water table is above the surface we		*/
@@ -46,36 +46,53 @@ double recompute_gamma( struct patch_object *patch,
 	/*--------------------------------------------------------------*/ 
 	
 	if (patch[0].soil_defaults[0][0].recompute_gamma_flag == 1)  {
-
-	adjustment = 0.0;
-	z1 = patch[0].z;  
-	if (patch[0].sat_deficit_z > ZERO)	
-		water_table_z1	 = (z1 - patch[0].sat_deficit_z);
-	else
-		water_table_z1 = z1;
-	d = 0;
-	if (patch[0].innundation_list[d].num_neighbours > 0)
-		for (i =0; i < patch[0].innundation_list[d].num_neighbours; i++) {
-			z2 = patch[0].innundation_list[d].neighbours[i].patch[0].z;
-			if (patch[0].innundation_list[d].neighbours[i].patch[0].sat_deficit_z > 0)
-				water_table_z2	 = (z2 - patch[0].innundation_list[d].neighbours[i].patch[0].sat_deficit_z);
-			else
-				water_table_z2 = z2;
-			if (fabs(z1-z2) > ZERO) {
-				adjustment += max(((water_table_z1 - water_table_z2) / (z1 - z2) *
-					patch[0].innundation_list[d].neighbours[i].gamma),0.0);
-			}
-			else adjustment += 0.0;
-		}
-	else
-		adjustment = 1.0;
-	}
-	else {
-		adjustment = 1.0;
-	}
-
-
-	revised_total_gamma = adjustment * total_gamma;		
+        totalperimeter = 0.0;
+        z1 = patch[0].z;
+        if (patch[0].sat_deficit_z > ZERO){
+            water_table_z1     = (z1 - patch[0].sat_deficit_z);
+        }else{
+            water_table_z1 = z1;
+        }
+        d = 0;
+        if (patch[0].innundation_list[d].num_neighbours > 0 && patch[0].drainage_type != STREAM){
+            revised_total_gamma = 0.0;
+            for (i =0; i < patch[0].innundation_list[d].num_neighbours; i++) {
+                
+                z2 = patch[0].innundation_list[d].neighbours[i].patch[0].z;
+                if (patch[0].innundation_list[d].neighbours[i].patch[0].sat_deficit_z > 0){
+                    water_table_z2     = (z2 - patch[0].innundation_list[d].neighbours[i].patch[0].sat_deficit_z);
+                }else{
+                    water_table_z2 = z2;
+                }
+                
+                if( water_table_z1>water_table_z2 ){
+                    
+                    patch[0].innundation_list[d].neighbours[i].gamma = (water_table_z1 - water_table_z2) * patch[0].innundation_list[d].neighbours[i].perimeter_distance;
+                    revised_total_gamma += patch[0].innundation_list[d].neighbours[i].gamma;
+                    totalperimeter += patch[0].innundation_list[d].neighbours[i].perimeter;
+                }else{
+                    patch[0].innundation_list[d].neighbours[i].gamma = 0.0;
+                }
+            }// end of for loop i
+            
+            if(revised_total_gamma>0){
+                
+                for (i =0; i < patch[0].innundation_list[d].num_neighbours; i++) {
+                    patch[0].innundation_list[d].neighbours[i].gamma /= revised_total_gamma; // gamma fraction
+                }//end of for neighbour i loop
+               
+                revised_total_gamma /= totalperimeter;
+                revised_total_gamma *= patch[0].area;
+            }else{
+                revised_total_gamma = 0.0;
+            }
+            
+        }else{
+            revised_total_gamma = total_gamma;
+        }
+    }else{
+        revised_total_gamma = total_gamma;
+    }
 			
 		
 		
