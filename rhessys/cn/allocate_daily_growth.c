@@ -47,7 +47,10 @@ int allocate_daily_growth(int nlimit,
 						  struct ndayflux_patch_struct *ndf_patch,
 						  struct epvar_struct *epv,
 						  struct epconst_struct epc,
-						  struct date current_date)
+						  struct date current_date,
+                          struct patch_object *patch,
+                          struct canopy_strata_object *stratum,
+                          struct command_line_object *command_line)
 {
 	/*------------------------------------------------------*/
 	/*	Local function declarations.						*/
@@ -99,7 +102,12 @@ int allocate_daily_growth(int nlimit,
 	preday_npool = ns->npool;
 	preday_cpool = cs->cpool;
 
-
+    /* track plant health records */
+    if(stratum[0].phen.gwseasonday>0){
+        stratum[0].gDayCount ++;
+        stratum[0].nFactor += patch[0].soil_ns.fract_potential_uptake;
+    }
+    
 	/*--------------------------------------------------------------*/
 	/*	allocation partitioning			*/
 	/* computed in compute_N_uptake routines for allocation specific models */

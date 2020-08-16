@@ -41,9 +41,9 @@ void	output_yearly_growth_canopy_stratum( int basinID, int hillID, int zoneID,
 	/*--------------------------------------------------------------*/
 	/*	Local function definition.									*/
 	/*--------------------------------------------------------------*/
-
+    double numDays_1 = 1.0/(1.0*stratum->gDayCount);
   	fprintf(outfile,
-       		 "%d %d %d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf \n",
+       		 "%d %d %d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %d %lf %lf %lf %lf %d %lf %lf %lf %lf %lf\n",
 
         	current_date.year,
         	basinID,
@@ -71,13 +71,39 @@ void	output_yearly_growth_canopy_stratum( int basinID, int hillID, int zoneID,
             stratum[0].acc_year.minNSC,
             stratum[0].cs.mortality_fract,
             stratum[0].epv.height, // the reason here height is different with fire.yearly, is fire.yearly is before burning but, stratum.yearly; if turn off the fire effect they should be the same
-            stratum[0].rootzone.depth*1000.0);
-
+            stratum[0].rootzone.depth*1000.0,
+            stratum[0].gDayCount,
+            stratum[0].nFactor *numDays_1, // 1 is good
+            stratum[0].wFactor *numDays_1, // 1 is good
+            stratum[0].lFactor *numDays_1, // large is good
+            stratum[0].gFactor *numDays_1, // 1 is good; actual/potential
+            stratum[0].cs.num_resprout,
+            stratum[0].gwPSN *numDays_1,   // flux
+            stratum[0].gwMResp *numDays_1, // flux
+            stratum[0].gwAPAR *numDays_1, // 1 is good
+            stratum[0].gwLWP *numDays_1, // 1 is good
+            stratum[0].gwVPD *numDays_1 // 1 is good
+            );
+    
+    
+    
+    
             if (command_line[0].f == NULL) { //If there is fire yearly growth output, set up set in the fire yearly growth output
 
             stratum[0].acc_year.psn = 0.0;
             stratum[0].acc_year.minNSC = -999;
             }
 
+            stratum[0].gDayCount = 0; // tracking @ allocate_daily_growth
+            stratum[0].nFactor = 0.0; // tracking @ allocate_daily_growth
+            stratum[0].wFactor = 0.0; // tracking @ patch_daily_F
+            stratum[0].lFactor = 0.0; // tracking @ canopy_stratum_daily_F
+            stratum[0].gFactor = 0.0; // tracking @ canopy_stratum_daily_F
+            stratum[0].gwPSN = 0.0;   // tracking @ canopy_stratum_daily_F
+            stratum[0].gwMResp = 0.0; // tracking @ canopy_stratum_daily_F
+            stratum[0].gwAPAR = 0.0;  // tracking @ canopy_stratum_daily_F
+            stratum[0].gwLWP = 0.0;   // tracking @ canopy_stratum_daily_F
+            stratum[0].gwVPD = 0.0;   // tracking @ canopy_stratum_daily_F
+    
 	return;
 } /*end output_yearly_growth_canopy_stratum*/

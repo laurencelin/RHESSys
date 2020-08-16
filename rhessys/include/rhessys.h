@@ -2869,10 +2869,10 @@ struct  stratum_default
 /*----------------------------------------------------------*/
 struct  canopy_strata_object
         {
-        int             patch_ID;
-        int             ID;
-        int             num_base_stations;
-	int		veg_parm_ID;
+        int     patch_ID;
+        int     ID;
+        int     num_base_stations;
+        int		veg_parm_ID;
         double  APAR_direct;                                    /* (umol photon/m2*day) */
         double  APAR_diffuse;                                   /* */
         double  cover_fraction;
@@ -2925,6 +2925,16 @@ struct  canopy_strata_object
         struct  accumulate_strata_object        acc_month;
         struct  accumulate_strata_object        acc_year;
         struct  mult_conduct_struct     mult_conductance;
+        int gDayCount; // counting days in growth period
+        double nFactor; //nitrogen
+        double wFactor; //water
+        double lFactor; //psn
+        double gFactor; //conductivity
+        double gwPSN;
+        double gwMResp;
+        double gwAPAR;
+        double gwLWP;
+        double gwVPD;
         };
 
 

@@ -1067,6 +1067,14 @@ void	canopy_stratum_daily_F(
 		m_vpd_sunlit * stratum[0].epv.proj_lai_sunlit)
 		/ (stratum[0].epv.proj_lai_shade+stratum[0].epv.proj_lai_sunlit);
 
+    if(stratum[0].phen.gwseasonday>0){
+        stratum[0].gFactor += (stratum[0].potential_gs_sunlit+stratum[0].potential_gs_shade)>0? (stratum[0].gs_sunlit+stratum[0].gs_shade)/(stratum[0].potential_gs_sunlit+stratum[0].potential_gs_shade) : 0.0;
+    
+                
+        stratum[0].gwAPAR += stratum[0].mult_conductance.APAR;
+        stratum[0].gwLWP += stratum[0].mult_conductance.LWP;
+        stratum[0].gwVPD += stratum[0].mult_conductance.vpd;
+    }
 
 	}
 	else {
@@ -1665,6 +1673,9 @@ void	canopy_stratum_daily_F(
 			fprintf(stderr,"Error in compute_maint_resp() from bbgc.c... Exiting\n");
 			exit(EXIT_FAILURE);
 		}
+        if(stratum[0].phen.gwseasonday>0){
+            stratum[0].gwMResp += stratum[0].cdf.leaf_day_mr + stratum[0].cdf.leaf_night_mr + stratum[0].cdf.livecroot_mr + stratum[0].cdf.livestem_mr + stratum[0].cdf.froot_mr;
+        }
 		if ((stratum[0].epv.all_lai > ZERO) && (stratum[0].snow_stored < ZERO))  {
 			/*--------------------------------------------------------------*/
 			/*	convert maintenance resp from kg/m2*day to umol/m2*s	*/
@@ -1866,6 +1877,11 @@ void	canopy_stratum_daily_F(
 		stratum[0].cdf.assim_shade = 0.0;
 	}
 
+    if(stratum[0].phen.gwseasonday>0){
+        stratum[0].gwPSN += stratum[0].cdf.psn_to_cpool;
+        stratum[0].lFactor += (stratum[0].ppfd_sunlit*stratum[0].epv.proj_lai_sunlit + stratum[0].ppfd_shade*stratum[0].epv.proj_lai_shade);
+    }
+        
 	/*--------------------------------------------------------------*/
 	/*	perform growth related computations (if grow flag is on */
 	/*--------------------------------------------------------------*/

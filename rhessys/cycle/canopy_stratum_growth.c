@@ -64,7 +64,10 @@ void	canopy_stratum_growth(
 		struct ndayflux_patch_struct *,
 		struct	epvar_struct *,
 		struct	epconst_struct,
-		struct	date);
+		struct	date,
+        struct patch_object *patch,
+        struct canopy_strata_object *stratum,
+        struct command_line_object *command_line);
 	int	allocate_annual_growth(
 		int,
 		int,
@@ -125,7 +128,10 @@ void	canopy_stratum_growth(
 			&(patch[0].ndf),
 			&(stratum[0].epv),
 			stratum[0].defaults[0][0].epc,
-			current_date) != 0){
+			current_date,
+            patch,
+            stratum,
+            command_line) != 0){
 			fprintf(stderr,"FATAL ERROR: in allocate_daily_growth");
 			exit(EXIT_FAILURE);
 			}

@@ -1918,21 +1918,23 @@ void		patch_daily_F(
 			strata =
 				patch[0].canopy_strata[(patch[0].layers[layer].strata[stratum])];
    
-	    if(command_line[0].vegspinup_flag > 0){
-        if (strata->target.met == 0)
-          patch[0].target_status = 0;
-        }
-			  if ( (strata[0].defaults[0][0].epc.veg_type != NON_VEG) ){
+            if(command_line[0].vegspinup_flag > 0){
+                if (strata->target.met == 0)
+                    patch[0].target_status = 0;
+            }
+            if ( (strata[0].defaults[0][0].epc.veg_type != NON_VEG) ){
 
-			   	if (transpiration_reduction_percent < 1.0) {
-				  strata->cdf.psn_to_cpool = strata->cdf.psn_to_cpool  * transpiration_reduction_percent;
-				  strata->cs.availc = (strata->cs.availc + strata->cdf.total_mr)  * transpiration_reduction_percent - strata->cdf.total_mr;
-				  strata->gs_sunlit *= transpiration_reduction_percent;		
-				  strata->gs_shade *= transpiration_reduction_percent;		
-				  strata->mult_conductance.LWP *= transpiration_reduction_percent;
-				  strata->ndf.potential_N_uptake *= transpiration_reduction_percent;
-				}
-
+                if (transpiration_reduction_percent < 1.0) {
+                  strata->cdf.psn_to_cpool = strata->cdf.psn_to_cpool  * transpiration_reduction_percent;
+                  strata->cs.availc = (strata->cs.availc + strata->cdf.total_mr)  * transpiration_reduction_percent - strata->cdf.total_mr;
+                  strata->gs_sunlit *= transpiration_reduction_percent;
+                  strata->gs_shade *= transpiration_reduction_percent;
+                  strata->mult_conductance.LWP *= transpiration_reduction_percent;
+                  strata->ndf.potential_N_uptake *= transpiration_reduction_percent;
+                }
+                if(strata[0].phen.gwseasonday>0){
+                    strata[0].wFactor += transpiration_reduction_percent;
+                }
 				vegtype=1;
 				canopy_stratum_growth(
 					world,

@@ -678,6 +678,16 @@ struct canopy_strata_object *construct_canopy_strata(
 	canopy_strata[0].epv.wstress_days = 0;
 	canopy_strata[0].epv.max_fparabs = 0.0;
 	canopy_strata[0].epv.min_vwc = 1.0;
+    canopy_strata[0].gDayCount = 0;
+    canopy_strata[0].nFactor = 0.0;
+    canopy_strata[0].wFactor = 0.0;
+    canopy_strata[0].lFactor = 0.0;
+    canopy_strata[0].gFactor = 0.0;
+    canopy_strata[0].gwPSN = 0.0;
+    canopy_strata[0].gwMResp = 0.0;
+    canopy_strata[0].gwAPAR = 0.0;
+    canopy_strata[0].gwLWP = 0.0;
+    canopy_strata[0].gwVPD = 0.0;
 	/*--------------------------------------------------------------*/
 	/*	Read in the number of  strata base stations 					*/
 	/*--------------------------------------------------------------*/
