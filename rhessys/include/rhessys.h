@@ -1178,49 +1178,6 @@ struct	soil_default
 	double  overstory_height_thresh;        /* Defines lower limit of overstory (m) */
 	double  understory_height_thresh;       /* Defines upper limit of understory (m) */
 	struct soil_class	soil_type;
-    // building up lookup table; organized by every 0.1 % sat_def
-    double max_sat_def_1; // 1/max_sat_def;
-    double exfiltration_wilting_point;
-    double exfiltration_S_pow;
-    double *sat_def_z;
-    double *sat_def;
-    double *sat_def_0zm;
-    double *vksat_0zm;
-    double *vksat_z;
-    double *exfiltration_coef;
-    double *fc1_0z;
-    double *fc1_030r;
-    double *fc1_025r;
-    double *fc1_020r;
-    double *fc1_015r;
-    double *fc1_010r;
-    double *fc1_006r;
-    double *fc1_003r;
-    double *fc1_00012r;
-    double *pot_caprise_0z;
-    double *pot_caprise_030r;
-    double *pot_caprise_025r;
-    double *pot_caprise_020r;
-    double *pot_caprise_015r;
-    double *pot_caprise_010r;
-    double *pot_caprise_006r;
-    double *pot_caprise_003r;
-    double *pot_caprise_00012r;
-    double *transmissivity_maxdailyflux;
-    double *transmissivity_dailyflux;
-    double *transmissivity_dailyfluxSoluteProp;
-    int soildepthLen;
-    double *rtz2sat_def_0z;
-    int *rtz2sat_def_pct_index;
-    int active_zone_index;
-    int maxrootdepth_index;
-    double maxrootdepth_sat_0z;
-    double active_zone_sat_0z;
-    double active_zone_sat_0z_1;
-    double active_zone_omProp;
-    double *rtz2NO3prop;
-    double *rtz2NH4prop;
-    double *rtz2DOMprop;
 	};
 
 /*----------------------------------------------------------*/
